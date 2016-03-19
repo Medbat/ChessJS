@@ -1,0 +1,28 @@
+function show(obj, level)
+{
+    for (key in obj)
+	{
+        if (typeof obj[key] == "object")
+        {
+            show(obj[key], level + 1)
+		}
+        else
+		{
+            console.log(key + " " + obj[key] + " " + typeof obj[key] + " "  + level)
+        }
+	}
+}
+
+MyObject = {
+    id : 1,
+    name : "Sample",
+    boolval : true,
+	arr : [1, 2, 3],
+    getName : function()
+    {
+        return this.name;
+    },
+	Obj : { one:1, two: 2 }
+}
+
+show(MyObject, 0)

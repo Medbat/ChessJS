@@ -1,0 +1,26 @@
+function puz(a, side)
+{
+	var counter = 0
+	for (var i = 0; i < a.length - 1; i++)
+	{
+		counter++
+		var sorted = true
+		for (var j = 0; j < a.length - i - 1; j++)
+		{
+			if (side && a[j] < a[j + 1] || !side && a[j] > a[j+1])
+			{
+				var temp = a[j]
+				a[j] = a[j + 1]
+				a[j + 1] = temp
+				var sorted = false
+			}
+		}
+		if (sorted)
+			break
+	}
+	console.log(counter)
+}
+
+mas = [1, 3,5, 12, 4,0 ,-123,1]
+puz(mas, true)
+console.log(mas)
