@@ -46,27 +46,68 @@ var CurrentTurn = SideEnum.White;
 var letters = "abcdefgh";
 var Check = SideEnum.No;
 
-function CheckCheck()
+function CheckCheckmate()
 {
 	var $kingsPositions = $('td:has(img[type="'+ChessmanEnum.King+'"])');
 	for (var i = 0; i < 2; i++)
 	{
 		var kingSide = $kingsPositions.eq(i).children().first().attr('side');
-		//function GetPossibleMoves(chessman, position, side, intrest)
 		var $enemyPositions = $('td:has(img[side='+(kingSide==SideEnum.White?SideEnum.Black:SideEnum.White)+'])');
+		var kingPos = GetPositionComponents($kingsPositions.eq(i).attr('position'));
 		for (var j = 0; j < $enemyPositions.length; j++)
 		{
 			var danger = GetPossibleMoves(
 				$enemyPositions.eq(j).children().first().attr('type'), 
-				GetPositionComponents($enemyPositions.eq(j).attr('position')), 
-				kingSide==SideEnum.White?SideEnum.Black:SideEnum.White, 
+				GetPositionComponents($enemyPositions.eq(j).attr('position')),
 				InterestEnum.Hit);
-			console.log(danger);
-			console.log(GetPositionComponents($kingsPositions.eq(i).attr('position')));
-			//if ($.inArray(danger, GetPositionComponents($kingsPositions.eq(i).attr('position'))))
-			//	console.log(kingSide + " is under attack");
+			var check = false;
+			danger.forEach(function(item, i, danger) 
+			{
+				if (item[0] == kingPos[0] && item[1] == kingPos[1])
+				{
+					console.log(kingSide + " is under attack by " + $enemyPositions.eq(j).children().first().attr('type'));
+					check = true;
+					return;
+				}
+			});
+			if (check)
+				return parseInt(kingSide);
 		}
 	}
+	return SideEnum.No;
+}
+
+function RoqueAvailability(king, rook)
+{
+	// шах ли сейчас, двигались ли фигуры
+	if (king.hasAttribute('moved') || rook.hasAttribute('moved') || king.getAttribute('side') == Check)
+		return false;
+	// есть ли фигуры между
+	kingPos = GetPositionComponents(king.parentElement.getAttribute('position'));
+	rookPos = GetPositionComponents(rook.parentElement.getAttribute('position'));
+	var inc = kingPos[0] < rookPos[0];
+	var i = kingPos[0];
+	while (true)
+	{
+		i += inc?1:-1;
+		if (i == rookPos[0])
+			break;
+		if ($('td[position="' + GetPositionFromComponents([i, kingPos[1]]) + '"]').first().children().length != 0)
+			return false;
+	}
+	// будет ли король под шахом при рокировке
+	var startingPoint = king.parentElement;
+	for (var i = 1; i <= 2; i++)
+	{
+		$('td[position="' + GetPositionFromComponents([(inc?i:-i) + kingPos[0], kingPos[1]]) + '"]').append(king);
+		if (king.getAttribute('side') == CheckCheckmate())
+		{
+			startingPoint.appendChild(king);
+			return false;
+		}
+	}
+	startingPoint.appendChild(king);
+	return [(inc?2:-2) + kingPos[0], kingPos[1]];
 }
 
 function ChangeTurn()
@@ -219,19 +260,30 @@ function setChessmen()
 
 function testSet()
 {
+	var whiteRook = document.createElement('img')
+	whiteRook.setAttribute('src', '..\\..\\chessmen\\black_rook.png')
+	whiteRook.setAttribute('side', SideEnum.Black)
+	whiteRook.setAttribute('type', ChessmanEnum.Rook)
+	$('td[position="'+letters.charAt(0)+'8"]').append(whiteRook)
+	var whiteRook = document.createElement('img')
+	whiteRook.setAttribute('src', '..\\..\\chessmen\\black_rook.png')
+	whiteRook.setAttribute('side', SideEnum.Black)
+	whiteRook.setAttribute('type', ChessmanEnum.Rook)
+	$('td[position="'+letters.charAt(7)+'8"]').append(whiteRook)
+	
+	
 	var whiteQueen = document.createElement('img')
 	whiteQueen.setAttribute('src', '..\\..\\chessmen\\white_queen.png')
 	whiteQueen.setAttribute('side', SideEnum.White)
 	whiteQueen.setAttribute('type', ChessmanEnum.Queen)
 	$('td[position="'+letters.charAt(3)+'1"]').append(whiteQueen)
-	var blackQueen = document.createElement('img')
-	
 	
 	var whiteKing = document.createElement('img')
 	whiteKing.setAttribute('src', '..\\..\\chessmen\\white_king.png')
 	whiteKing.setAttribute('side', SideEnum.White)
 	whiteKing.setAttribute('type', ChessmanEnum.King)
 	$('td[position="'+letters.charAt(4)+'1"]').append(whiteKing)
+
 	var blackKing = document.createElement('img')
 	blackKing.setAttribute('src', '..\\..\\chessmen\\black_king.png')
 	blackKing.setAttribute('side', SideEnum.Black)
@@ -329,12 +381,47 @@ function EndTurn()
 	CurrentState = StateEnum.SelectMan;
 }
 
-function GetPossibleMoves(chessman, position, side, intrest)
+function ExcludeCheckmateMoves(piece, moves)
+{
+	var startPos = piece.parentElement;
+	for (var i = 0; i < moves.length; i++)
+	{
+		var killed = null;
+		var $newPos = $('td[position="' + GetPositionFromComponents(moves[i]) + '"]');
+		if ($newPos.children().length > 0)
+		{
+			killed = $newPos.children()[0];
+			$newPos.children().first().remove();
+		}
+		$newPos.append(piece);
+		var checkMate = CheckCheckmate();
+		if (piece.getAttribute('side') == checkMate)
+		{
+			moves = moves.splice(i, 1);
+			i--;
+		}
+		if (killed != null)
+			$newPos.append(killed);
+	}
+	startPos.appendChild(piece);
+}
+
+// с учетом шаха
+function GetFullyPossibleMoves(chessman, position, intrest)
+{
+	var result = GetPossibleMoves(chessman, position, intrest);
+	var piece = $('td[position="' + GetPositionFromComponents(position) + '"]');
+	ExcludeCheckmateMoves(piece.children()[0], result);
+	return result;
+}
+
+// без учета шаха
+function GetPossibleMoves(chessman, position, intrest)
 {
 	var movements;
 	var range;
-	chessman = parseInt(chessman);
-	side = parseInt(side);
+	chessman = +chessman;
+	var side = parseInt( $('td[position="' + GetPositionFromComponents(position) + ']"').children().first().attr('side'));
 	if (chessman == ChessmanEnum.Pawn)
 	{
 		if (intrest == InterestEnum.Move)
@@ -386,12 +473,28 @@ $(document).on('click', "td#chess",
 			if ($this.children().first().attr('side') != CurrentTurn)
 				return;
 			
+			$('td').filter('[rouqe="true"]').removeAttr('rouqe');
+			
 			// получаем текущие координаты фигуры
 			var position = GetPositionComponents($this.attr('position'))
 			// в зависимости от типа фигуры, показываем клетки, возможные для хода
 			var chessman = parseInt($this.children().first().attr('type'))
-			var movement = GetPossibleMoves(chessman, position, CurrentTurn, InterestEnum.Move);
-			var attack = GetPossibleMoves(chessman, position, CurrentTurn, InterestEnum.Hit);
+			var movement = GetFullyPossibleMoves(chessman, position, InterestEnum.Move);
+			var attack = GetFullyPossibleMoves(chessman, position, InterestEnum.Hit);
+			
+			// рокировка
+			if (chessman == ChessmanEnum.King)
+			{
+				var $availableRooks = $('img[type="'+ChessmanEnum.Rook+'"][side="'+CurrentTurn+'"]:not([moved])');
+				for (var i = 0; i < $availableRooks.length; i++)
+				{
+					var rouqe = RoqueAvailability($this.first().children()[0], $availableRooks[i]);
+					if (rouqe === false)
+						continue;
+					movement.push(rouqe);
+					$('td[position="' + GetPositionFromComponents(rouqe) + '"]').attr('rouqe', 'true');
+				}
+			}
 			
 			// если нет вариантов хода, выбор не происходит
 			if (movement.length == 0 && attack.length == 0)
@@ -439,6 +542,8 @@ $(document).on('click', "td#chess",
 					$(this).empty();
 				}
 				
+				//var savedField = document.getElementById("");
+				
 				// взятие на проходе
 				// оставляем шлейф
 				var digit = SelectedMan.parentElement.getAttribute('position').charAt(1);
@@ -458,8 +563,22 @@ $(document).on('click', "td#chess",
 					$('td#chess[position=' + GetPositionFromComponents(position) + ']').children().first().remove();
 				}
 				
+				// рокировка
+				if (SelectedMan.getAttribute('type') == ChessmanEnum.King &&
+					$(this).attr('rouqe') == "true")
+				{
+					var flag = ($(this).attr('position').charAt(0) == 'g');
+					var test = 'td[position="' + (flag?'f':'d') + (CurrentTurn==SideEnum.White?1:8) + '"]';
+					var test2 = 'td[position="' + (flag?'h':'a') + (CurrentTurn==SideEnum.White?1:8) + '"]';
+					$(test).
+						append($(test2).first().children().first());
+				}
+				
 				// перемещаем фигуру
 				$(this).append(SelectedMan);
+				// запоминаем, что двигали короля/ладью
+				if (SelectedMan.getAttribute('type') == ChessmanEnum.King || SelectedMan.getAttribute('type') == ChessmanEnum.Rook)
+					SelectedMan.setAttribute('moved', 'true');
 				digit = SelectedMan.parentElement.getAttribute('position').charAt(1);
 				// апгрейд пешки
 				if (SelectedMan.getAttribute('type') == ChessmanEnum.Pawn && 
@@ -509,7 +628,7 @@ $(document).on('click', "td#chess",
 					EndTurn();
 				}
 				ClearPossibleMoves();
-				CheckCheck();
+				Check = CheckCheckmate();
 				break;
 			default:
 				break;
