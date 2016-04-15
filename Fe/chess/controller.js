@@ -85,16 +85,13 @@ $(document).on('click', "td#chess",
 				
 				if ($(this).attr('canMove') != 'true')
 					break;
-				var $killed = null;
-				var $killedPosition = null;
+				
+				// var $killed = null;
+				// var $killedPosition = null;
 				if ($(this).children().length > 0)
 				{
-					$killed = $(this).children()[0];
-					$killedPosition = $(this);
 					$(this).empty();
 				}
-				
-				//var savedField = document.getElementById("");
 				
 				// взятие на проходе
 				// оставляем шлейф
@@ -113,8 +110,8 @@ $(document).on('click', "td#chess",
 					var position = GetPositionComponents($(this).attr('position'));
 					position[1] += (CurrentTurn == SideEnum.White?-1:1);
 					var temp = $('td#chess[position=' + GetPositionFromComponents(position) + ']');
-					$killed = temp.children().eq(0);
-					$killedPosition = temp;
+					// $killed = temp.children().eq(0);
+					// $killedPosition = temp;
 					temp.children().first().remove();
 				}
 				
@@ -134,16 +131,18 @@ $(document).on('click', "td#chess",
 				var startingPosition = SelectedMan.parentElement;
 				$(this).append(SelectedMan);
 				
+				Model = BuildInnerModel();
+				
 				// если в таком случае получаем шах на нашего короля, откатываемся
-				if (GetKingUnderAttack()[CurrentTurn] == true)
-				{
-					startingPosition.appendChild(SelectedMan);
-					if ($killed !== null)
-					{
-						$killedPosition.append($killed);
-					}
-					break;
-				}
+				// if (GetKingUnderAttack()[CurrentTurn] == true)
+				// {
+					// startingPosition.appendChild(SelectedMan);
+					// if ($killed !== null)
+					// {
+						// $killedPosition.append($killed);
+					// }
+					// break;
+				// }
 				
 				// запоминаем, что двигали короля/ладью
 				if (SelectedMan.getAttribute('type') == ChessmanEnum.King || SelectedMan.getAttribute('type') == ChessmanEnum.Rook)

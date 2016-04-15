@@ -4,3 +4,4 @@ var CurrentTurn = SideEnum.White;
 
 var PossibleMoves;
 
+var Model;

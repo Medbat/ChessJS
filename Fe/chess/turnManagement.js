@@ -14,5 +14,6 @@ function EndTurn()
 	ChangeTurn();
 	// возвращаемся в фазу выбора фигуры
 	CurrentState = StateEnum.SelectMan;
+	Model = BuildInnerModel();
 	CalculateSideMoves(CurrentTurn);
 }

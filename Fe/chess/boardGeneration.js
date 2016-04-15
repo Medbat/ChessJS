@@ -142,14 +142,7 @@ function setChessmen()
 	piece.setAttribute('type', ChessmanEnum.King)
 	$('td[position="'+letters.charAt(4)+'8"]').append(piece)
 	
-	// for (var i = 0; i < 100; i++)
-	// {
-		// $('td[position="'+letters.charAt(4)+'8"]').append(piece)
-		// $('td[position="'+letters.charAt(4)+'1"]').append(piece)
-		// $('td[position="'+letters.charAt(3)+'8"]').append(piece)
-		
-	// }
-	
+	Model = BuildInnerModel();
 	CalculateSideMoves(CurrentTurn);
 }
 

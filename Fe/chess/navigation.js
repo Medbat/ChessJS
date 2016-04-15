@@ -17,8 +17,7 @@ function NavigateContiniously(positionComponents, side, intrest, movement, range
 	range = typeof range !== 'undefined' ? range : 100500;
 	var newPosition = positionComponents.clone();
 	var positions = [];
-	var $startingCell = $('td#chess[position='+GetPositionFromComponents(positionComponents)+']');
-	var weArePawn = $startingCell.children().first().attr('type') == ChessmanEnum.Pawn;
+	var weArePawn = Model[positionComponents[0]][positionComponents[1]].type == ChessmanEnum.Pawn;
 	for (var i = 0; i < range; i++)
 	{
 		newPosition[0] += movement[0];
@@ -28,7 +27,8 @@ function NavigateContiniously(positionComponents, side, intrest, movement, range
 		var $cell = $('td[position="'+GetPositionFromComponents(newPosition)+'"]');
 		if (intrest == InterestEnum.Move)
 		{
-			if ($cell.children().length == 0 && !(weArePawn && $cell[0].hasAttribute('enpassant')))
+			if (Model[newPosition[0]][newPosition[1]] == null /*&&
+				!(weArePawn && $cell[0].hasAttribute('enpassant'))*/)
 			{
 				positions.push(newPosition.clone());
 			}
@@ -37,9 +37,12 @@ function NavigateContiniously(positionComponents, side, intrest, movement, range
 		}
 		else
 		{
-			if ($cell.children().length == 0 && !(weArePawn && $cell[0].hasAttribute('enpassant')))
+			if (Model[newPosition[0]][newPosition[1]] == null && 
+				!(weArePawn && $cell[0].hasAttribute('enpassant')))
 				continue;
-			if ($cell.children().first().attr('side') != side || (weArePawn && $cell[0].hasAttribute('enpassant')))
+			if ((Model[newPosition[0]][newPosition[1]] !== null && 
+				Model[newPosition[0]][newPosition[1]].side != side) || 
+				(weArePawn && $cell[0].hasAttribute('enpassant')))
 				positions.push(newPosition.clone());
 			break;
 		}
@@ -65,8 +68,8 @@ function NavigateContiniouslyMultiplePositions(positionComponents, side, intrest
 function GetFullyPossibleMoves(chessman, position, intrest)
 {
 	var result = GetPossibleMoves(chessman, position, intrest);
-	var piece = $('td[position="' + GetPositionFromComponents(position) + '"]').children()[0];
-	result = ExcludeCheckMoves(piece, result);
+	//var $piece = $('td[position="' + GetPositionFromComponents(position) + '"]').children().eq(0);
+	result = ExcludeCheckMoves(position, result);
 	return result;
 }
 
@@ -76,7 +79,7 @@ function GetPossibleMoves(chessman, position, intrest)
 	var movements;
 	var range;
 	chessman = +chessman;
-	var side = parseInt( $('td[position="' + GetPositionFromComponents(position) + '"]').children().first().attr('side'));
+	var side = +Model[position[0]][position[1]].side;
 	if (chessman == ChessmanEnum.Pawn)
 	{
 		if (intrest == InterestEnum.Move)
@@ -128,7 +131,7 @@ function CalculateSideMoves(side)
 	side = parseInt(side);
 	var $pieces = $('img[side="' + side + '"]');
 	var any = false;
-	var check = (GetKingUnderAttack()[side] == true);
+	var check = GetKingUnderAttack();
 	for (var i = 0; i < $pieces.length; i++)
 	{
 		var info = {};
@@ -142,7 +145,21 @@ function CalculateSideMoves(side)
 	if (!any)
 	{
 		CurrentState = StateEnum.GameEnd;
-		
+		if (check[0] == false && check[1] == false)
+		{
+			console.log("Draw");
+		}
+		else
+		{
+			if (check[0] == true)
+			{
+				console.log("Black wins");
+			}
+			else
+			{
+				console.log("White wins");
+			}
+		}
 	}
 	return any;
 }

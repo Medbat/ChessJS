@@ -1,36 +1,47 @@
- function GetKingUnderAttack()
+function GetKingUnderAttack()
 {
 	var whiteKingIsUnderAttack = false;
 	var blackKingIsUnderAttack = false;
-	var $kingsCells = $('td:has(img[type="'+ChessmanEnum.King+'"])');
-	for (var i = 0; i < 2; i++)
+	var kings = [];
+	for (var i = 0; i < 8; i++)
 	{
-		var kingSide = $kingsCells.eq(i).children().first().attr('side');
-		var $enemyPositions = $('td:has(img[side='+(kingSide==SideEnum.White?SideEnum.Black:SideEnum.White)+'])');
-		var kingPosition = GetPositionComponents($kingsCells.eq(i).attr('position'));
-		for (var j = 0; j < $enemyPositions.length; j++)
+		for (var j = 0; j < 8; j++)
 		{
-			var danger = GetPossibleMoves(
-				$enemyPositions.eq(j).children().first().attr('type'), 
-				GetPositionComponents($enemyPositions.eq(j).attr('position')),
-				InterestEnum.Hit);
-			var check = false;
-			danger.forEach(function(item, index, danger) 
+			if (Model[i][j] !== null && Model[i][j].type == ChessmanEnum.King)
+				kings.push({
+					position : [i, j],
+					side : Model[i][j].side
+				});
+		}
+	}
+	
+	for (var kingIndex = 0; kingIndex < 2; kingIndex++)
+	{
+		for (var i = 0; i < 8; i++)
+		{
+			for (var j = 0; j < 8; j++)
 			{
-				if (item[0] == kingPosition[0] && item[1] == kingPosition[1])
+				if (Model[i][j] === null || Model[i][j].side == kings[kingIndex].side)
+					continue;
+				var danger = GetPossibleMoves(Model[i][j].type, [i, j], InterestEnum.Hit);
+				var check = false;
+				danger.forEach(function(item, index, danger) 
 				{
-					check = true;
-					return;
+					if (item[0] == kings[kingIndex].position[0] && item[1] == kings[kingIndex].position[1])
+					{
+						check = true;
+						return;
+					}
+				});
+				if (check)
+				{
+					if (kings[kingIndex].side == 0)
+						whiteKingIsUnderAttack = true;
+					else 
+						blackKingIsUnderAttack = true;
+					if (whiteKingIsUnderAttack == true && blackKingIsUnderAttack == true)
+						return [true, true];
 				}
-			});
-			if (check)
-			{
-				if (kingSide == 0)
-					whiteKingIsUnderAttack = true;
-				else 
-					blackKingIsUnderAttack = true;
-				if (whiteKingIsUnderAttack == true && blackKingIsUnderAttack == true)
-					return [true, true];
 			}
 		}
 	}
@@ -38,30 +49,42 @@
 }
 
 
-function ExcludeCheckMoves(piece, moves)
+function ExcludeCheckMoves(position, moves)
 {
-	var startPos = piece.parentElement;
+	var side = Model[position[0]][position[1]].side;
+	// var $startPos = $piece.parent();
 	var i = 0;
 	while (i < moves.length)
 	{
 		var killed = null;
-		var $newPos = $('td[position="' + GetPositionFromComponents(moves[i]) + '"]');
-		if ($newPos.children().length > 0)
+		// var $newPos = $('td[position="' + GetPositionFromComponents(moves[i]) + '"]').first();
+		var newPos = moves[i];
+		if (Model[newPos[0]][newPos[1]] !== null)
 		{
-			killed = $newPos.children()[0];
-			$newPos.children().first().remove();
+			killed = Model[newPos[0]][newPos[1]];
+			Model[newPos[0]][newPos[1]] = null;
 		}
-		$newPos.append(piece);
+		// $newPos.append($piece);
+		// передвигаем
+		Model[newPos[0]][newPos[1]] = Model[position[0]][position[1]];
+		Model[position[0]][position[1]] = null;
+		
 		var check = GetKingUnderAttack();
-		if (check[parseInt(piece.getAttribute('side'))] == true)
+		if (check[+side] == true)
 		{
 			moves.splice(i, 1);
 			i--;
 		}
-		if (killed != null)
-			$newPos.append(killed);
+		Model[position[0]][position[1]] = Model[newPos[0]][newPos[1]];
+		Model[newPos[0]][newPos[1]] = null;
+		if (killed !== null)
+		{
+			Model[newPos[0]][newPos[1]] = killed;
+			killed = null;
+		}
+		// $newPos.append($killed);
 		i++;
 	}
-	startPos.appendChild(piece);
+	// $startPos.append($piece);
 	return moves;
 }
