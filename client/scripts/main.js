@@ -1,7 +1,0 @@
-
-createTable();
-setChessmen();
-// testSet();
-
-
-

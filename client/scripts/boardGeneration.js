@@ -13,7 +13,7 @@ function takeColor()
 }
 takeColor.isBlack = false
 
-function createTable()
+function createTable(isWhite)
 {
 	var mainTable = document.createElement('table');
 	mainTable.setAttribute('id', 'chess');
@@ -22,23 +22,22 @@ function createTable()
 	for (var i = 0; i < 8; i++)
 	{
 		td = tr.insertCell();
-		td.innerHTML = '<p align="center">' + letters[i] + '</p>';
+		td.innerHTML = '<p align="center">' + letters[isWhite?i:8-i-1] + '</p>';
 	}
 	for (var i = 0; i < 8; i++)
 	{	
 		tr = mainTable.insertRow();
 		td = tr.insertCell();
-		td.innerHTML = (8-i);
+		td.innerHTML = isWhite?8-i:i+1;
 		for (var j = 0; j < 8; j++)
 		{
 			td = tr.insertCell();
 			td.setAttribute('id', 'chess');
 			td.setAttribute('bgcolor', takeColor());
-			td.setAttribute('position', letters.charAt(j)+(8-i));
-			var pos = document.createTextNode(letters.charAt(j)+(8-i));
+			td.setAttribute('position', letters.charAt(isWhite?j:8-j-1)+(isWhite?8-i:i+1));
 		}
 		td = tr.insertCell();
-		td.innerHTML = (8-i);
+		td.innerHTML = isWhite?8-i:i+1;
 		takeColor();
 	}
 	tr = mainTable.insertRow();
@@ -46,7 +45,7 @@ function createTable()
 	for (var i = 0; i < 8; i++)
 	{
 		td = tr.insertCell();
-		td.innerHTML = '<p align="center">' + letters[i] + '</p>';
+		td.innerHTML = '<p align="center">' + letters[isWhite?i:8-i-1] + '</p>';
 	}
 	document.body.appendChild(mainTable);
 }
