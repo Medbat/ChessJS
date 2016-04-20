@@ -1351,3 +1351,6 @@ Format date/time with localized ordering and separators.
 	i10nDE.format(new Date("2015-01-02")) === "2.1.2015"
 ###ES5
 	// no equivalent in ES5
+
+#Summary
+Итого, ES приблизился к стандарту C# очень-очень сильно :)
