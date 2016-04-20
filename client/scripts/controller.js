@@ -9,6 +9,9 @@ function ClearPossibleMoves()
 function SelectMan($this)
 {
 	// выбор не производится если:
+	// игра онлайн и сейчас не наш ход
+	if (GameMode == GameTypeEnum.Multiplayer && MySide != CurrentTurn)
+		return;
 	// в выбранной клетке нету фигур
 	if ($this.children().length == 0)
 		return;
@@ -84,22 +87,9 @@ $(document).on('click', "td#chess",
 				if ($(this).attr('canMove') != 'true')
 					break;
 				
-				var from = SelectedMan.parentElement.getAttribute('position');
-				var to = $(this).attr('position');
 				
 				PerformMove($(this));
 				
-				// если мы играем онлаен, сообщаем наш ход
-				if (MySide !== undefined)
-				{
-					socket.emit(
-						'player_move', 
-						{ 
-							playerColor : MySide == SideEnum.White?"white":"black",
-							from : { x : from[0], y : +from[1] },
-							to : { x : to[0], y : +to[1] }
-						} );
-				}
 				
 				break;
 			default:
@@ -111,19 +101,57 @@ $(document).on('click', "td#chess",
 $(document).on('click', 'img#upgradeSelection',
 	function()
 	{
-		var cell = SelectedMan.parentNode;
-		var id = SelectedMan.getAttribute('pieceId');
-		SelectedMan.remove();
-		$(this)[0].removeAttribute('id');
-		$(this).attr('pieceId', id);
-		cell.appendChild($(this)[0]);
-		$('div#upgradingDiv').remove();
-		EndTurn();
+		PerformPromotion($(this)[0]);
 	}
 )
 
-function PerformMove($this)
+function PerformPromotion($this, send)
 {
+	var cell = SelectedMan.parentNode;
+	var id = SelectedMan.getAttribute('pieceId');
+	var to = cell.getAttribute('position');
+	var from = $this.getAttribute('from');
+	SelectedMan.remove();
+	$this.removeAttribute('id');
+	$this.removeAttribute('from');
+	$this.getAttribute('pieceId', id);
+	cell.appendChild($this);
+	$('div#upgradingDiv').remove();
+	if (GameMode == GameTypeEnum.Multiplayer && send === undefined)
+	{
+		var pieceName;
+		switch (+$this.getAttribute('type'))
+		{
+			case ChessmanEnum.Rook:
+				pieceName = 'rook';
+				break;
+			case ChessmanEnum.Knight:
+				pieceName = 'knight';
+				break;
+			case ChessmanEnum.Bishop:
+				pieceName = 'bishop';
+				break;
+			case ChessmanEnum.Queen:
+				pieceName = 'queen';
+				break;
+		}
+		socket.emit(
+			'turn_promotion', 
+			{
+				playerColor : MySide == SideEnum.White?"white":"black",
+				from : { x : from[0].toUpperCase(), y : +from[1] },
+				to : { x : to[0].toUpperCase(), y : +to[1] },
+				newPiece : pieceName
+			});
+	}
+	EndTurn();
+}
+
+function PerformMove($this, send, simple)
+{
+	var from = SelectedMan.parentElement.getAttribute('position');
+	var to = $this.attr('position');
+				
 	if ($this.children().length > 0)
 	{
 		$this.empty();
@@ -151,6 +179,7 @@ function PerformMove($this)
 		temp.children().first().remove();
 	}
 	
+	var castling = false;
 	// рокировка
 	if (SelectedMan.getAttribute('type') == ChessmanEnum.King &&
 		$this.attr('rouqe') == "true")
@@ -158,6 +187,7 @@ function PerformMove($this)
 		var flag = ($this.attr('position').charAt(0) == 'g');
 		var test = 'td[position="' + (flag?'f':'d') + (CurrentTurn==SideEnum.White?1:8) + '"]';
 		var test2 = 'td[position="' + (flag?'h':'a') + (CurrentTurn==SideEnum.White?1:8) + '"]';
+		castling = $(test2).attr('position').toUpperCase();
 		$(test).
 			append($(test2).first().children().first());
 	}
@@ -174,7 +204,7 @@ function PerformMove($this)
 		SelectedMan.setAttribute('moved', 'true');
 	digit = SelectedMan.parentElement.getAttribute('position').charAt(1);
 	// апгрейд пешки
-	if (SelectedMan.getAttribute('type') == ChessmanEnum.Pawn && 
+	if (send === undefined && SelectedMan.getAttribute('type') == ChessmanEnum.Pawn && 
 		((CurrentTurn == SideEnum.White && digit == 8) || 
 		(CurrentTurn == SideEnum.Black && digit == 1)))
 	{
@@ -185,40 +215,72 @@ function PerformMove($this)
 		
 		var rook = document.createElement('img');
 		rook.setAttribute('src', 
-			CurrentTurn==SideEnum.White?'..\\..\\chessmen\\white_rook.png':'..\\..\\chessmen\\black_rook.png')
+			CurrentTurn==SideEnum.White?'pictures\\white_rook.png':'pictures\\black_rook.png')
 		rook.setAttribute('side', CurrentTurn);
 		rook.setAttribute('type', ChessmanEnum.Rook);
 		rook.setAttribute('id', 'upgradeSelection');
+		rook.setAttribute('from', from);
 		upgradingDiv.appendChild(rook);
 		var knight = document.createElement('img')
 		knight.setAttribute('src', 
-			CurrentTurn==SideEnum.White?'..\\..\\chessmen\\white_knight.png':'..\\..\\chessmen\\black_knight.png');
+			CurrentTurn==SideEnum.White?'pictures\\white_knight.png':'pictures\\black_knight.png');
 		knight.setAttribute('side', CurrentTurn);
 		knight.setAttribute('type', ChessmanEnum.Knight);
 		knight.setAttribute('id', 'upgradeSelection');
+		knight.setAttribute('from', from);
 		upgradingDiv.appendChild(knight);
 			
 		var bishop = document.createElement('img')
 		bishop.setAttribute('src', 
-			CurrentTurn==SideEnum.White?'..\\..\\chessmen\\white_bishop.png':'..\\..\\chessmen\\black_bishop.png');
+			CurrentTurn==SideEnum.White?'pictures\\white_bishop.png':'pictures\\black_bishop.png');
 		bishop.setAttribute('side', CurrentTurn);
 		bishop.setAttribute('type', ChessmanEnum.Bishop);
 		bishop.setAttribute('id', 'upgradeSelection');
+		bishop.setAttribute('from', from);
 		upgradingDiv.appendChild(bishop);
 		
 		var queen = document.createElement('img')
 		queen.setAttribute('src', 
-			CurrentTurn==SideEnum.White?'..\\..\\chessmen\\white_queen.png':'..\\..\\chessmen\\black_queen.png');
+			CurrentTurn==SideEnum.White?'pictures\\white_queen.png':'pictures\\black_queen.png');
 		queen.setAttribute('side', CurrentTurn);
 		queen.setAttribute('type', ChessmanEnum.Queen);
 		queen.setAttribute('id', 'upgradeSelection');
+		queen.setAttribute('from', from);
 		upgradingDiv.appendChild(queen);
 		
 		document.body.appendChild(upgradingDiv);
 	}
 	else
 	{
-		EndTurn();
+		// если хотим НЕ просто подвинуть пешку перед тем как превратить её в нечто большее
+		if (simple === undefined)
+		{
+			EndTurn(CurrentTurn == MySide);
+			
+			// если мы играем онлаен, сообщаем наш ход
+			if (GameMode == GameTypeEnum.Multiplayer && send === undefined)
+			{
+				if (castling === false)
+				{
+					socket.emit(
+						'turn_move', 
+						{
+							playerColor : MySide == SideEnum.White?"white":"black",
+							from : { x : from[0].toUpperCase(), y : +from[1] },
+							to : { x : to[0].toUpperCase(), y : +to[1] }
+						});
+				}
+				else
+				{
+					socket.emit(
+						'turn_castling', 
+						{ 
+							playerColor : MySide == SideEnum.White?"white":"black",
+							from : { x : castling[0], y : +castling[1] }
+						});
+				}
+			}
+		}
 	}
 	ClearPossibleMoves();
 }

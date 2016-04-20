@@ -11,7 +11,7 @@ function takeColor()
 		return "NavajoWhite"
 	}
 }
-takeColor.isBlack = false
+takeColor.isBlack = false;
 
 function createTable(isWhite)
 {
@@ -53,18 +53,18 @@ function createTable(isWhite)
 // создать фигуры и поставить их в стартовые позиции
 function setChessmen()
 {
-	var id = 0;
+	this.id = 0;
 	var piece;
 	for (var i = 0; i < 8; i++)
 	{
 		piece = document.createElement('img');
-		piece.setAttribute('pieceId', id++);
+		piece.setAttribute('pieceId', this.id++);
 		piece.setAttribute('src', 'pictures\\white_pawn.png')
 		piece.setAttribute('side', SideEnum.White)
 		piece.setAttribute('type', ChessmanEnum.Pawn)
 		$('td[position="'+letters.charAt(i)+'2"]').append(piece)
 		piece = document.createElement('img')
-		piece.setAttribute('pieceId', id++);
+		piece.setAttribute('pieceId', this.id++);
 		piece.setAttribute('src', 'pictures\\black_pawn.png')
 		piece.setAttribute('side', SideEnum.Black)
 		piece.setAttribute('type', ChessmanEnum.Pawn)		
@@ -73,13 +73,13 @@ function setChessmen()
 	for (var i = 0; i < 2; i++)
 	{
 		piece = document.createElement('img')
-		piece.setAttribute('pieceId', id++);
+		piece.setAttribute('pieceId', this.id++);
 		piece.setAttribute('src', 'pictures\\white_rook.png')
 		piece.setAttribute('side', SideEnum.White)
 		piece.setAttribute('type', ChessmanEnum.Rook)
 		$('td[position="'+letters.charAt(i==0?0:7)+'1"]').append(piece)
 		piece = document.createElement('img')
-		piece.setAttribute('pieceId', id++);
+		piece.setAttribute('pieceId', this.id++);
 		piece.setAttribute('src', 'pictures\\black_rook.png')
 		piece.setAttribute('side', SideEnum.Black)
 		piece.setAttribute('type', ChessmanEnum.Rook)
@@ -88,13 +88,13 @@ function setChessmen()
 	for (var i = 0; i < 2; i++)
 	{
 		piece = document.createElement('img')
-		piece.setAttribute('pieceId', id++);
+		piece.setAttribute('pieceId', this.id++);
 		piece.setAttribute('src', 'pictures\\white_knight.png')
 		piece.setAttribute('side', SideEnum.White)
 		piece.setAttribute('type', ChessmanEnum.Knight)
 		$('td[position="'+letters.charAt(i==0?1:6)+'1"]').append(piece)
 		piece = document.createElement('img')
-		piece.setAttribute('pieceId', id++);
+		piece.setAttribute('pieceId', this.id++);
 		piece.setAttribute('src', 'pictures\\black_knight.png')
 		piece.setAttribute('side', SideEnum.Black)
 		piece.setAttribute('type', ChessmanEnum.Knight)
@@ -103,13 +103,13 @@ function setChessmen()
 	for (var i = 0; i < 2; i++)
 	{
 		piece = document.createElement('img')
-		piece.setAttribute('pieceId', id++);
+		piece.setAttribute('pieceId', this.id++);
 		piece.setAttribute('src', 'pictures\\white_bishop.png')
 		piece.setAttribute('side', SideEnum.White)
 		piece.setAttribute('type', ChessmanEnum.Bishop)
 		$('td[position="'+letters.charAt(i==0?2:5)+'1"]').append(piece)
 		piece = document.createElement('img')
-		piece.setAttribute('pieceId', id++);
+		piece.setAttribute('pieceId', this.id++);
 		piece.setAttribute('src', 'pictures\\black_bishop.png')
 		piece.setAttribute('side', SideEnum.Black)
 		piece.setAttribute('type', ChessmanEnum.Bishop)
@@ -117,25 +117,25 @@ function setChessmen()
 	}
 	
 	piece = document.createElement('img')
-	piece.setAttribute('pieceId', id++);
+	piece.setAttribute('pieceId', this.id++);
 	piece.setAttribute('src', 'pictures\\white_queen.png')
 	piece.setAttribute('side', SideEnum.White)
 	piece.setAttribute('type', ChessmanEnum.Queen)
 	$('td[position="'+letters.charAt(3)+'1"]').append(piece)
 	piece = document.createElement('img')
-	piece.setAttribute('pieceId', id++);
+	piece.setAttribute('pieceId', this.id++);
 	piece.setAttribute('src', 'pictures\\black_queen.png')
 	piece.setAttribute('side', SideEnum.Black)
 	piece.setAttribute('type', ChessmanEnum.Queen)
 	$('td[position="'+letters.charAt(3)+'8"]').append(piece)
 	piece = document.createElement('img')
-	piece.setAttribute('pieceId', id++);
+	piece.setAttribute('pieceId', this.id++);
 	piece.setAttribute('src', 'pictures\\white_king.png')
 	piece.setAttribute('side', SideEnum.White)
 	piece.setAttribute('type', ChessmanEnum.King)
 	$('td[position="'+letters.charAt(4)+'1"]').append(piece)
 	piece = document.createElement('img')
-	piece.setAttribute('pieceId', id++);
+	piece.setAttribute('pieceId', this.id++);
 	piece.setAttribute('src', 'pictures\\black_king.png')
 	piece.setAttribute('side', SideEnum.Black)
 	piece.setAttribute('type', ChessmanEnum.King)
@@ -143,7 +143,7 @@ function setChessmen()
 	
 	Model = BuildInnerModel();
 	CalculateSideMoves(CurrentTurn);
-}
+};
 
 // function testSet()
 // {

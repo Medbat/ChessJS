@@ -1,4 +1,3 @@
-
 // enums
 var StateEnum =
 {
@@ -26,6 +25,11 @@ var InterestEnum =
 {
 	Move : 0,
 	Hit : 1
+}
+var GameTypeEnum = 
+{
+	Singleplayer : 0,
+	Multiplayer : 1
 }
 // end enums
 

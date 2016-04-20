@@ -63,7 +63,6 @@ function NavigateContiniouslyMultiplePositions(positionComponents, side, intrest
 	return result;
 }
 
-
 // с учетом шаха
 function GetFullyPossibleMoves(chessman, position, intrest)
 {
@@ -125,7 +124,7 @@ function GetPossibleMoves(chessman, position, intrest)
 	return result;
 }
 
-function CalculateSideMoves(side)
+function CalculateSideMoves(side, itWasMe)
 {
 	PossibleMoves = [];
 	side = parseInt(side);
@@ -148,16 +147,31 @@ function CalculateSideMoves(side)
 		if (check[0] == false && check[1] == false)
 		{
 			console.log("Draw");
+			Winner = SideEnum.No;
+			if (!itWasMe && GameMode == GameTypeEnum.Multiplayer)
+			{
+				socket.emit('turn_draw');
+			}
 		}
 		else
 		{
 			if (check[0] == true)
 			{
 				console.log("Black wins");
+				Winner = SideEnum.Black;
+				if (!itWasMe && MySide == SideEnum.White && GameMode == GameTypeEnum.Multiplayer)
+				{
+					socket.emit('turn_mate');
+				}
 			}
 			else
 			{
 				console.log("White wins");
+				Winner = SideEnum.White;
+				if (!itWasMe && MySide == SideEnum.Black && GameMode == GameTypeEnum.Multiplayer)
+				{
+					socket.emit('turn_mate');
+				}
 			}
 		}
 	}

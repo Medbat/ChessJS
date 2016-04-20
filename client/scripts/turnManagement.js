@@ -8,12 +8,12 @@ function ChangeTurn()
 	$passants.removeAttr('enpassant');
 }
 
-function EndTurn()
+function EndTurn(itWasMe)
 {
 	SelectedMan = null;
 	ChangeTurn();
 	// возвращаемся в фазу выбора фигуры
 	CurrentState = StateEnum.SelectMan;
 	Model = BuildInnerModel();
-	CalculateSideMoves(CurrentTurn);
+	CalculateSideMoves(CurrentTurn, itWasMe);
 }
