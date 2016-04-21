@@ -2,10 +2,11 @@
 
 ##Constants
 Referred object is still mutable
-Chrome 52,Opera 39,Firefox 48,Edge 14 - F
-Internet Explorer 11 - P
+
+Chrome 52,Opera 39,Firefox 48,Edge 14 - Fully supported
+Internet Explorer 11 - Partially supported
 ###ES6
-	const PI = 3.141593
+	const PI = 3.141593a
 ###ES5
 	// Only with ES5 and global context
 	Object.defineProperty(typeof global === "object" ? global : window, "PI", {
@@ -17,8 +18,9 @@ Internet Explorer 11 - P
 
 ##Block-scoped
 Variables, functions and constants without hoisting
-Chrome 52,Opera 39,Edge 14 - F
-Internet Explorer 11,Firefox 48 - P
+
+Chrome 52,Opera 39,Edge 14 - Fully supported
+Internet Explorer 11,Firefox 48 - Partially supported
 ###ES6
 	var a = 1;
 	{
@@ -57,8 +59,9 @@ Internet Explorer 11,Firefox 48 - P
 ##Arrow functions (lambda expressions)
 Simpler and 
 More expressive closure syntax, more intuitive handling of current object context
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	odds  = evens.map(v => v + 1);
 	
@@ -87,9 +90,10 @@ Internet Explorer 11 - N
 
 ##Extended parameters handling
 Default parameters, parameters aggregation
-Chrome 52,Opera 39,Edge 14 - F
-Firefox 48 - P
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14 - Fully supported
+Firefox 48 - Partially supported
+Internet Explorer 11 - Not supported
 ###ES6
 	function f (x, y = 7, z = 42) 
 	{
@@ -121,8 +125,9 @@ Internet Explorer 11 - N
 	f(1, 2, "hello", true, 7) === 9;
 	
 ##Spread operator
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	var params = [ "hello", true, 7 ]
 	var other = [ 1, 2, ...params ] // [ 1, 2, "hello", true, 7 ]
@@ -139,8 +144,9 @@ Internet Explorer 11 - N
 	var chars = str.split(""); // [ "f", "o", "o" ]
 	
 ##String interpolation
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	var customer = { name: "Foo" }
 	var card = { amount: 7, product: "Bar", unitprice: 42 }
@@ -155,8 +161,9 @@ Internet Explorer 11 - N
 	"a total of " + (card.amount * card.unitprice) + " bucks?";
 	
 ##Custom interpolation
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	get`http://example.com/foo?bar=${bar + baz}&quux=${quux}`
 ###ES5
@@ -176,8 +183,9 @@ Internet Explorer 11 - N
 	
 ##Binary/octal literals
 Direct support for safe binary and octal literals
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	0b111110111 === 503
 	0o767 === 503
@@ -188,8 +196,9 @@ Internet Explorer 11 - N
 	
 ##Unicode String & RegExp Literal
 Extended support using Unicode within strings and regular expressions.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	"𠮷".length === 2
 	"𠮷".match(/./u)[0].length === 2
@@ -207,8 +216,9 @@ Internet Explorer 11 - N
 	
 ##Regular Expression Sticky Matching
 Keep the matching position sticky between matches and this way support efficient parsing of arbitrary long input strings, even with an arbitrary number of distinct regular expressions.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	let parser = (input, match) => {
 		for (let pos = 0, lastPos = input.length; pos < lastPos; ) {
@@ -258,8 +268,9 @@ Internet Explorer 11 - N
 	
 ##Property Shorthand
 Shorter syntax for common object property definition idiom.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	obj = { x, y };
 ###ES5
@@ -267,8 +278,9 @@ Internet Explorer 11 - N
 	
 ##Computed Property Names
 Support for computed names in object property definitions.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	let obj = {
 		foo: "bar",
@@ -282,8 +294,9 @@ Internet Explorer 11 - N
 	
 Method Properties
 Support for method notation in object property definitions, for both regular functions and generator functions.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	obj = {
 		foo (a, b) {
@@ -310,8 +323,9 @@ Internet Explorer 11 - N
 	
 ##Array Matching
 Intuitive and flexible destructuring of Arrays into individual variables during assignment.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	var list = [ 1, 2, 3 ];
 	var [ a, , b ] = list;
@@ -323,8 +337,9 @@ Internet Explorer 11 - N
 	
 ##Object Matching, Shorthand Notation
 Intuitive and flexible destructuring of Objects into individual variables during assignment.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	var { op, lhs, rhs } = getASTNode();
 ###ES5
@@ -335,8 +350,8 @@ Internet Explorer 11 - N
 	
 ##Object Matching, Deep Matching
 Intuitive and flexible destructuring of Objects into individual variables during assignment.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	var { op: a, lhs: { op: b }, rhs: c } = getASTNode();
 ###ES5
@@ -347,8 +362,9 @@ Internet Explorer 11 - N
 
 ##Parameter Context Matching
 Intuitive and flexible destructuring of Arrays and Objects into individual parameters during function calls.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	function f ([ name, val ]) {
 		console.log(name, val);
@@ -384,8 +400,9 @@ Internet Explorer 11 - N
 	
 ##Fail-Soft Destructuring
 Fail-soft destructuring, optionally with defaults.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ##ES6
 	var list = [ 7, 42 ];
 	var [ a = 1, b = 2, c = 3, d ] = list;
@@ -406,8 +423,9 @@ Internet Explorer 11 - N
 	
 ##Value Export/Import
 Support for exporting/importing values from/to modules without global namespace pollution.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	//  lib/math.js
 	export function sum (x, y) { return x + y };
@@ -436,8 +454,9 @@ Internet Explorer 11 - N
 	
 ##Default & Wildcard
 Marking a value as the default exported value and mass-mixin of values.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	//  lib/mathplusplus.js
 	export * from "lib/math";
@@ -462,8 +481,9 @@ Internet Explorer 11 - N
 	
 ##Class Definition
 More intuitive, OOP-style and boilerplate-free classes.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	class Shape {
 		constructor (id, x, y) {
@@ -487,8 +507,9 @@ Internet Explorer 11 - N
 	
 ##Class Inheritance
 More intuitive, OOP-style and boilerplate-free inheritance.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	class Rectangle extends Shape {
 		constructor (id, x, y, width, height) {
@@ -520,8 +541,9 @@ Internet Explorer 11 - N
 	
 ##Class Inheritance, From Expressions
 Support for mixin-style inheritance by extending from expressions yielding function objects. [Notice: the generic aggregation function is usually provided by a library like this one, of course]
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	var aggregation = (baseClass, ...mixins) => {
 		let base = class _Combined extends baseClass {
@@ -636,8 +658,9 @@ Internet Explorer 11 - N
 	
 ##Base Class Access
 Intuitive access to base class constructor and methods.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	class Shape {
 		…
@@ -687,8 +710,9 @@ Internet Explorer 11 - N
 	
 ##Static Members
 Simple support for static class members.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	class Rectangle extends Shape {
 		…
@@ -722,8 +746,9 @@ Internet Explorer 11 - N
 	
 ##Static Members
 Simple support for static class members.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6	class Rectangle extends Shape {
 		…
 		static defaultRectangle () {
@@ -756,8 +781,9 @@ Internet Explorer 11 - N
 	
 ##Getter/Setter
 Getter/Setter also directly within classes (and not just within object initializers, as it is possible since ECMAScript 5.1).
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	class Rectangle {
 		constructor (width, height) {
@@ -789,8 +815,9 @@ Internet Explorer 11 - N
 	
 ##Symbol Type
 Unique and immutable data type to be used as an identifier for object properties. Symbol can have an optional description, but for debugging purposes only.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	Symbol("foo") !== Symbol("foo");
 	const foo = Symbol();
@@ -809,8 +836,9 @@ Internet Explorer 11 - N
 	
 ##Global Symbols
 Global symbols, indexed through unique keys.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported,
+Internet Explorer 11 - Not supported
 ###ES6
 	Symbol.for("app.foo") === Symbol.for("app.foo")
 	const foo = Symbol.for("app.foo");
@@ -831,8 +859,9 @@ Internet Explorer 11 - N
 	
 ##Iterator & For-Of Operator
 Support "iterable" protocol to allow objects to customize their iteration behaviour. Additionally, support "iterator" protocol to produce sequence of values (either finite or infinite). Finally, provide convenient of operator to iterate over all values of an iterable object.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	let fibonacci = {
 		[Symbol.iterator]() {
@@ -874,8 +903,9 @@ Internet Explorer 11 - N
 	
 ##Generator Function, Iterator Protocol
 Support for generators, a special case of Iterators containing a generator function, where the control flow can be paused and resumed, in order to produce sequence of values (either finite or infinite).
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6	let fibonacci = {
 		*[Symbol.iterator]() {
 			let pre = 0, cur = 1;
@@ -914,8 +944,9 @@ Internet Explorer 11 - N
 	
 ##Generator Function, Direct Use
 Support for generator functions, a special variant of functions where the control flow can be paused and resumed, in order to produce sequence of values (either finite or infinite).
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	function* range (start, end, step) {
 		while (start < end) {
@@ -944,8 +975,9 @@ Internet Explorer 11 - N
 	
 ##Generator Matching
 Support for generator functions, i.e., functions where the control flow can be paused and resumed, in order to produce and spread sequence of values (either finite or infinite).
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	let fibonacci = function* (numbers) {
 		let pre = 0, cur = 1;
@@ -966,8 +998,9 @@ Internet Explorer 11 - N
 	
 ##Generator Control-Flow
 Support for generators, a special case of Iterators where the control flow can be paused and resumed, in order to support asynchronous programming in the style of "co-routines" in combination with Promises (see below).
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	//  generic asynchronous control-flow driver
 	function async (proc, ...params) {
@@ -1018,8 +1051,9 @@ Internet Explorer 11 - N
 	
 ##Generator Methods
 Support for generator methods, i.e., methods in classes and on objects, based on generator functions.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	class Clz {
 		* bar () {
@@ -1036,8 +1070,9 @@ Internet Explorer 11 - N
 	
 ##Set Data-Structure
 Cleaner data-structure for common algorithms based on sets.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	let s = new Set();
 	s.add("hello").add("goodbye").add("hello");
@@ -1056,8 +1091,9 @@ Internet Explorer 11 - N
 			
 ##Map Data-Structure
 Cleaner data-structure for common algorithms based on maps.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6	let m = new Map();
 	m.set("hello", 42);
 	m.set(s, 34);
@@ -1080,8 +1116,9 @@ Internet Explorer 11 - N
 	
 ##Weak-Link Data-Structures
 Memory-leak-free Object-key’d side-by-side data-structures.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	let isMarked     = new WeakSet();
 	let attachedData = new WeakMap();
@@ -1113,8 +1150,9 @@ Internet Explorer 11 - N
 	
 ##Typed Arrays
 Support for arbitrary byte-based data structures to implement network protocols, cryptography algorithms, file format manipulations, etc.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	//  ES6 class equivalent to the following C structure:
 	//  struct Example { unsigned long id; char username[16]; float amountDue; };
@@ -1147,8 +1185,9 @@ Internet Explorer 11 - N
 	
 ##Object Property Assignment
 New function for assigning enumerable properties of one or more source objects onto a destination object.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	var dst  = { quux: 0 };
 	var src1 = { foo: 1, bar: 2 };
@@ -1175,8 +1214,9 @@ Internet Explorer 11 - N
 	
 ##Array Element Finding
 New function for finding an element in an array.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	[ 1, 3, 4, 2 ].find(x => x > 3); // 4
 ###ES5
@@ -1184,8 +1224,9 @@ Internet Explorer 11 - N
 	
 ##String Repeating
 New string repeating functionality.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6	" ".repeat(4 * depth);
 	"foo".repeat(3);
 ###ES5	Array((4 * depth) + 1).join(" ");
@@ -1193,8 +1234,9 @@ Internet Explorer 11 - N
 	
 ##String Searching
 New specific string functions to search for a sub-string.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	"hello".startsWith("ello", 1) // true
 	"hello".endsWith("hell", 4)   // true
@@ -1210,8 +1252,9 @@ Internet Explorer 11 - N
 	
 ##Number Type Checking
 New functions for checking for non-numbers and finite numbers.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	Number.isNaN(42) === false
 	Number.isNaN(NaN) === true
@@ -1237,8 +1280,9 @@ Internet Explorer 11 - N
 	
 ##Number Safety Checking
 Checking whether an integer number is in the safe range, i.e., it is correctly represented by JavaScript (where all numbers, including integer numbers, are technically floating point number).
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	Number.isSafeInteger(42) === true
 	Number.isSafeInteger(9007199254740992) === false
@@ -1256,8 +1300,9 @@ Internet Explorer 11 - N
 	
 ##Number Comparison
 Availability of a standard Epsilon value for more precise comparison of floating point numbers.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	console.log(0.1 + 0.2 === 0.3) // false
 	console.log(Math.abs((0.1 + 0.2) - 0.3) < Number.EPSILON) // true
@@ -1281,8 +1326,9 @@ Truncate a floating point number to its integral part, completely dropping the f
 	
 ##Number Sign Determination
 Determine the sign of a number, including special cases of signed zero and non-number.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	console.log(Math.sign(7))   // 1
 	console.log(Math.sign(0))   // 0
@@ -1301,8 +1347,9 @@ Internet Explorer 11 - N
 	
 ##Promise Usage
 First class representation of a value that may be made asynchronously and be available in the future.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	function msgAfterTimeout (msg, who, timeout) {
 		return new Promise((resolve, reject) => {
@@ -1328,8 +1375,9 @@ Internet Explorer 11 - N
 	
 ##Promise Combination
 Combine one or more promises into new promises without having to take care of ordering of the underlying asynchronous operations yourself.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	function fetchAsync (url, timeout, onData, onError) {
 		…
@@ -1379,8 +1427,9 @@ Internet Explorer 11 - N
 	
 ##Proxying
 Hooking into runtime-level object meta-operations.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	let target = {
 		foo: "Welcome, foo"
@@ -1397,8 +1446,9 @@ Internet Explorer 11 - N
 	
 ##Reflection
 Make calls corresponding to the object meta-operations.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	let obj = { a: 1 }
 	Object.defineProperty(obj, "b", { value: 2 })
@@ -1411,8 +1461,9 @@ Internet Explorer 11 - N
 	Object.getOwnPropertyNames(obj); // [ "a", "b" ]
 	
 ##Sorting a set of strings and searching within a set of strings. Collation is parameterized by locale and aware of Unicode.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	// in German,  "ä" sorts with "a"
 	// in Swedish, "ä" sorts after "z"
@@ -1428,8 +1479,9 @@ Internet Explorer 11 - N
 	
 ##Number Formatting
 Format numbers with digit grouping and localized separators.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	var i10nEN = new Intl.NumberFormat("en-US")
 	var i10nDE = new Intl.NumberFormat("de-DE")
@@ -1440,8 +1492,9 @@ Internet Explorer 11 - N
 	
 ##Currency Formatting
 Format numbers with digit grouping, localized separators and attached currency symbol.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6
 	var i10nUSD = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
 	var i10nGBP = new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" })
@@ -1454,8 +1507,9 @@ Internet Explorer 11 - N
 	
 ##Date/Time Formatting
 Format date/time with localized ordering and separators.
-Chrome 52,Opera 39,Edge 14,Firefox 48 - F
-Internet Explorer 11 - N
+
+Chrome 52,Opera 39,Edge 14,Firefox 48 - Fully supported
+Internet Explorer 11 - Not supported
 ###ES6	var i10nEN = new Intl.DateTimeFormat("en-US")
 	var i10nDE = new Intl.DateTimeFormat("de-DE")
 	i10nEN.format(new Date("2015-01-02")) === "1/2/2015"
