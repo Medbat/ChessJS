@@ -3,10 +3,9 @@
 ##Constants
 Referred object is still mutable
 
-Chrome 52,Opera 39,Firefox 48,Edge 14 - Fully supported
-Internet Explorer 11 - Partially supported
+Chrome 52,Opera 39,Firefox 48,Edge 14 - Fully supported, Internet Explorer 11 - Partially supported
 ###ES6
-	const PI = 3.141593a
+	const PI = 3.141593;
 ###ES5
 	// Only with ES5 and global context
 	Object.defineProperty(typeof global === "object" ? global : window, "PI", {
