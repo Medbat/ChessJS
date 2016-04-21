@@ -114,7 +114,7 @@ function PerformPromotion($this, send)
 	SelectedMan.remove();
 	$this.removeAttribute('id');
 	$this.removeAttribute('from');
-	$this.getAttribute('pieceId', id);
+	$this.setAttribute('pieceId', id);
 	cell.appendChild($this);
 	$('div#upgradingDiv').remove();
 	if (GameMode == GameTypeEnum.Multiplayer && send === undefined)
@@ -255,7 +255,7 @@ function PerformMove($this, send, simple)
 		// если хотим НЕ просто подвинуть пешку перед тем как превратить её в нечто большее
 		if (simple === undefined)
 		{
-			EndTurn(CurrentTurn == MySide);
+			EndTurn(GameMode == GameTypeEnum.Multiplayer ? CurrentTurn == MySide : false);
 			
 			// если мы играем онлаен, сообщаем наш ход
 			if (GameMode == GameTypeEnum.Multiplayer && send === undefined)

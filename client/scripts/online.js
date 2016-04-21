@@ -1,7 +1,7 @@
 var MySide;
 GameMode = GameTypeEnum.Multiplayer;
 
-var addr = '127.0.0.1';
+var addr = '192.168.1.63';
 var port = '3056';
 
 console.log('connecting to server ' + addr + ':' + port);
@@ -21,9 +21,9 @@ socket.on("connect", function ()
 	$('table').remove;
 	console.log('connected to server');
 	actionsDiv.innerHTML += 
-		'<a onClick="socket.emit(\'game_find\'); document.body.removeChild(actionsDiv); ' +
+		'<a href="#" onClick="socket.emit(\'game_find\'); document.body.removeChild(actionsDiv); ' +
 		'console.log(\'searching for game ...\');">PLAY</a><br/>' + 
-		'<a onClick="socket.emit(\'roomsList_subscribe\'); document.body.removeChild(actionsDiv);">WATCH</a>';
+		'<a href="#" onClick="socket.emit(\'roomsList_subscribe\'); document.body.removeChild(actionsDiv);">WATCH</a>';
 	document.body.appendChild(actionsDiv);
 	
 	socket.on('disconnect', function()
@@ -38,7 +38,7 @@ socket.on("connect", function ()
 		for (var i = 0; i < data.length; i++)
 		{
 			roomList.innerHTML += 
-				'<a onClick="socket.emit(\'room_enter\', \'' + data[i].roomID + 
+				'<a href="#" onClick="socket.emit(\'room_enter\', \'' + data[i].roomID + 
 				'\'); document.body.removeChild(roomList); createTable(true); ' +
 				'setChessmen(); MySide = SideEnum.No; Winner = null;">' + 
 				data[i].roomID + ' (' + data[i].length + ')</a><br/>';
@@ -56,13 +56,16 @@ socket.on("connect", function ()
 			switch (data[i].moveType)
 			{
 				case 'move':
-					DoMove(data[i].moveData);
+					if (CheckMove(data))
+						DoMove(data[i].moveData);
 					break;
 				case 'castling':
-					DoCastling(data[i].moveData);
+					if (CheckCastling(data[i].moveData))
+						DoCastling(data[i].moveData);
 					break;
 				case 'promotion':
-					DoPromotion(data[i].moveData);
+					if (CheckPromotion(data[i].moveData))
+						DoPromotion(data[i].moveData);
 					break;
 			}
 		}
@@ -80,85 +83,20 @@ socket.on("connect", function ()
 	
 	socket.on('player_move', function (data)
 	{
-		// если два хода подряд
-		if (CurrentTurn == MySide)
-		{
-			console.log('Opponent tried to move twice');
-			socket.emit('turnValidation_invalid');
-			return;
-		}
-		
-		// если пришла пустая/невозможная инфа
-		if (isBadObject(data) || 
-			isBadObject(data.from) ||
-			isBadObject(data.to) ||
-			isBadCoord(data.from) ||
-			isBadCoord(data.to))
-		{
-			console.log('Bad info was found');
-			socket.emit('turnValidation_invalid');
-			return;
-		}
-		
-		if (!ValidateFromTo(data, true))
-			return;
-		
-		DoMove(data);
+		if (CheckMove(data))
+			DoMove(data);
 	});
 	
 	socket.on('player_castling', function (data)
 	{
-		// если два хода подряд
-		if (CurrentTurn == MySide)
-		{
-			console.log('Opponent tried to move twice');
-			socket.emit('turnValidation_invalid');
-			return;
-		}
-		// если пришла пустая/невозможная инфа
-		if (isBadObject(data) || 
-			isBadObject(data.from) ||
-			isBadCoord(data.from))
-		{
-			console.log('Bad info was found');
-			socket.emit('turnValidation_invalid');
-			return;
-		}
-		
-		if (!ValidateFromTo(data, false))
-			return;
-		
-		// деланье
-		DoCastling(data);
+		if (CheckCastling(data))
+			DoCastling(data);
 	});
 	
 	socket.on('player_promotion', function (data)
 	{
-		// если два хода подряд
-		if (CurrentTurn == MySide)
-		{
-			console.log('Opponent tried to move twice');
-			socket.emit('turnValidation_invalid');
-			return;
-		}
-		// если пришла пустая/невозможная инфа
-		if (isBadObject(data) || 
-			isBadObject(data.from) ||
-			isBadObject(data.to) ||
-			isBadCoord(data.from) ||
-			isBadCoord(data.to) ||
-			(data.newPiece != 'knight' && data.newPiece != 'rook' && data.newPiece != 'bishop' && data.newPiece != 'queen'))
-		{
-			console.log('Bad info was found');
-			socket.emit('turnValidation_invalid');
-			return;
-		}
-		
-		if (!ValidateFromTo(data, true))
-			return;
-		
-		// деланье
-		DoPromotion(data);
+		if (CheckPromotion(data))
+			DoPromotion(data);
 	});
 	
 	socket.on('player_mate', function ()
@@ -227,6 +165,103 @@ function ValidateFromTo(data, isTo)
 			return false;
 		}
 	}
+	return true;
+}
+
+function CheckPromotion(data)
+{
+	// если два хода подряд
+	if (CurrentTurn == MySide)
+	{
+		console.log('Opponent tried to move twice');
+		socket.emit('turnValidation_invalid');
+		return false;
+	}
+	// если пришла пустая/невозможная инфа
+	if (isBadObject(data) || 
+		isBadObject(data.from) ||
+		isBadObject(data.to) ||
+		isBadCoord(data.from) ||
+		isBadCoord(data.to) ||
+		(data.newPiece != 'knight' && data.newPiece != 'rook' && data.newPiece != 'bishop' && data.newPiece != 'queen'))
+	{
+		console.log('Bad info was found');
+		socket.emit('turnValidation_invalid');
+		return false;
+	}
+	
+	if (!ValidateFromTo(data, true))
+		return false;
+	return true;
+}
+
+function CheckCastling(data)
+{
+	// если два хода подряд
+	if (CurrentTurn == MySide)
+	{
+		console.log('Opponent tried to move twice');
+		socket.emit('turnValidation_invalid');
+		return false;
+	}
+	// если пришла пустая/невозможная инфа
+	if (isBadObject(data) || 
+		isBadObject(data.from) ||
+		isBadCoord(data.from))
+	{
+		console.log('Bad info was found');
+		socket.emit('turnValidation_invalid');
+		return false;
+	}
+	if (!ValidateFromTo(data, false))
+		return false;
+	// если указана невозможная позиция ладьи
+	if (data.playerColor == 'white' && data.from.y != 1 && 
+		data.from.x != 'A' && data.from.x != 'H' ||
+		data.playerColor == 'black' && data.from.y != 8 && 
+		data.from.x != 'A' && data.from.x != 'H')
+	{
+		console.log('Bad info was found');
+		socket.emit('turnValidation_invalid');
+		return false;
+	}
+	// если ладьи нет на указанном месте/она ходила
+	var $rook = $('td[position="'+data.from.x.toLowerCase()+data.from.y+'"]');
+	if ($rook.children().length == 0 || $rook.children().first().attr('type') != ChessmanEnum.Rook ||
+		$rook.children().first().attr('moved') == 'false')
+	{
+		console.log('No rook at sent place/it has been moved');
+		socket.emit('turnValidation_invalid');
+		return false;
+	}
+	return true;
+}
+
+function CheckMove(data)
+{
+	// если два хода подряд
+		if (CurrentTurn == MySide)
+		{
+			console.log('Opponent tried to move twice');
+			socket.emit('turnValidation_invalid');
+			return false;
+		}
+		
+		// если пришла пустая/невозможная инфа
+		if (isBadObject(data) || 
+			isBadObject(data.from) ||
+			isBadObject(data.to) ||
+			isBadCoord(data.from) ||
+			isBadCoord(data.to))
+		{
+			console.log('Bad info was found');
+			socket.emit('turnValidation_invalid');
+			return false;
+		}
+		
+		if (!ValidateFromTo(data, true))
+			return false;
+	
 	return true;
 }
 

@@ -148,7 +148,7 @@ function CalculateSideMoves(side, itWasMe)
 		{
 			console.log("Draw");
 			Winner = SideEnum.No;
-			if (!itWasMe && GameMode == GameTypeEnum.Multiplayer)
+			if (GameMode == GameTypeEnum.Multiplayer && !itWasMe)
 			{
 				socket.emit('turn_draw');
 			}
@@ -159,7 +159,7 @@ function CalculateSideMoves(side, itWasMe)
 			{
 				console.log("Black wins");
 				Winner = SideEnum.Black;
-				if (!itWasMe && MySide == SideEnum.White && GameMode == GameTypeEnum.Multiplayer)
+				if (GameMode == GameTypeEnum.Multiplayer && !itWasMe && MySide == SideEnum.White)
 				{
 					socket.emit('turn_mate');
 				}
@@ -168,7 +168,7 @@ function CalculateSideMoves(side, itWasMe)
 			{
 				console.log("White wins");
 				Winner = SideEnum.White;
-				if (!itWasMe && MySide == SideEnum.Black && GameMode == GameTypeEnum.Multiplayer)
+				if (GameMode == GameTypeEnum.Multiplayer && !itWasMe && MySide == SideEnum.Black)
 				{
 					socket.emit('turn_mate');
 				}
