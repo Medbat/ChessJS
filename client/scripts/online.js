@@ -1,7 +1,7 @@
 var MySide;
 GameMode = GameTypeEnum.Multiplayer;
 
-var addr = '192.168.1.63';
+var addr = '127.0.0.1';
 var port = '3056';
 
 console.log('connecting to server ' + addr + ':' + port);
@@ -56,7 +56,7 @@ socket.on("connect", function ()
 			switch (data[i].moveType)
 			{
 				case 'move':
-					if (CheckMove(data))
+					if (CheckMove(data[i].moveData))
 						DoMove(data[i].moveData);
 					break;
 				case 'castling':
